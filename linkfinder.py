@@ -28,7 +28,7 @@ except ImportError:
 # Regex used
 regex_str = r"""
 
-  (?:"|')                               # Start newline delimiter
+  (?:"|')?                               # Start newline delimiter
 
   (
     ((?:[a-zA-Z]{1,10}://|//)           # Match a scheme [a-Z]*1-10 or //
@@ -60,10 +60,25 @@ regex_str = r"""
     \.(?:php|asp|aspx|jsp|json|
          action|html|js|txt|xml)        # . + extension
     (?:[\?|#][^"|']{0,}|))              # ? or # mark with parameters
+   |
+   (
+      /[a-zA-Z0-9_-]+/\$\{[a-zA-Z]\}                 # /route/${x}
+      |
+      /[a-zA-Z0-9_-]+/\$\{[a-zA-Z]\}/[a-zA-Z0-9_-]+   # /route/${x}/action
+      |
+      \$\{[a-zA-Z]\}/[a-zA-Z0-9_-]+                  # ${x}/action
+      |
+      [a-zA-Z0-9_-]+/\$\{[a-zA-Z]\}                 # /route/${x}
+      |
+      [a-zA-Z0-9_-]+/\$\{[a-zA-Z]\}/[a-zA-Z0-9_-]+   # /route/${x}/action
+      |
+      /\$\{[a-zA-Z]\}/[a-zA-Z0-9_-]+                  # ${x}/action
+    )
+
 
   )
 
-  (?:"|')                               # End newline delimiter
+  (?:"|')?                               # End newline delimiter
 
 """
 
